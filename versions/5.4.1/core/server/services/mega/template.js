@@ -1,6 +1,6 @@
 /* eslint indent: warn, no-irregular-whitespace: warn */
 const iff = (cond, yes, no) => (cond ? yes : no);
-module.exports = ({post, site, newsletter, templateSettings}) => {
+module.exports = ({ post, site, newsletter, templateSettings }) => {
     const date = new Date();
     const hasFeatureImageCaption = templateSettings.showFeatureImage && post.feature_image && post.feature_image_caption;
     return `<!doctype html>
@@ -150,7 +150,7 @@ dd {
 blockquote {
     margin: 2em 0 2em 0;
     padding: 0 25px 0 25px;
-    border-left: ${templateSettings.accentColor || '#15212A'} 2px solid;
+    border-left: ${templateSettings.accentColor || "#15212A"} 2px solid;
     font-size: 17px;
     font-weight: 500;
     line-height: 1.6em;
@@ -186,7 +186,7 @@ blockquote cite a {
 }
 
 a {
-    color: ${templateSettings.accentColor || '#15212A'};
+    color: ${templateSettings.accentColor || "#15212A"};
     text-decoration: none;
 }
 
@@ -426,7 +426,7 @@ figure blockquote p {
 
 .post-content a,
 .post-content-sans-serif a {
-    color: ${templateSettings.accentColor || '#08121A'};
+    color: ${templateSettings.accentColor || "#08121A"};
     text-decoration: underline;
 }
 
@@ -604,7 +604,7 @@ a[data-flickr-embed] img {
 }
 
 .kg-audio-thumbnail.placeholder {
-    background: ${templateSettings.accentColor || '#15212A'} !important;
+    background: ${templateSettings.accentColor || "#15212A"} !important;
 }
 
 .kg-callout-card {
@@ -652,7 +652,7 @@ a[data-flickr-embed] img {
 }
 
 .kg-callout-card-accent {
-    background: ${templateSettings.accentColor || '#15212A'};
+    background: ${templateSettings.accentColor || "#15212A"};
     color: #fff;
 }
 
@@ -695,7 +695,7 @@ a[data-flickr-embed] img {
 }
 
 .kg-header-card.kg-style-accent {
-    background: ${templateSettings.accentColor || '#15171a'};
+    background: ${templateSettings.accentColor || "#15171a"};
     color: #ffffff;
 }
 
@@ -768,7 +768,7 @@ a[data-flickr-embed] img {
 }
 
 .kg-style-light .kg-header-card-button {
-    background: ${templateSettings.accentColor || '#15212A'} !important;
+    background: ${templateSettings.accentColor || "#15212A"} !important;
     color: #ffffff !important;
 }
 
@@ -858,13 +858,13 @@ a[data-flickr-embed] img {
 }
 
 .btn-accent table td {
-    background-color: ${templateSettings.adjustedAccentColor || '#3498db'};
+    background-color: ${templateSettings.adjustedAccentColor || "#3498db"};
 }
 
 .btn-accent a {
-    background-color: ${templateSettings.adjustedAccentColor || '#3498db'};
-    border-color: ${templateSettings.adjustedAccentColor || '#3498db'};
-    color: ${templateSettings.adjustedAccentContrastColor || '#ffffff'};
+    background-color: ${templateSettings.adjustedAccentColor || "#3498db"};
+    border-color: ${templateSettings.adjustedAccentColor || "#3498db"};
+    color: ${templateSettings.adjustedAccentContrastColor || "#ffffff"};
 }
 
 /* -------------------------------------
@@ -1119,8 +1119,17 @@ a[data-flickr-embed] img {
     }
 }
 
+.ii a[href] {
+    display: none;
+    color: #15c;
+}
+#unsubscribe-display {
+display: inline-block;
+}
 
-${ templateSettings.showBadge ? `
+${
+    templateSettings.showBadge
+        ? `
 .footer-powered {
     text-align: center;
     padding-top: 70px;
@@ -1131,13 +1140,15 @@ ${ templateSettings.showBadge ? `
     width: 142px;
     height: 30px;
 }
-` : ''}
+`
+        : ""
+}
 
 </style>
 </head>
 
 <body>
-    <span class="preheader">${ post.excerpt ? post.excerpt : `${post.title} – ` }</span>
+    <span class="preheader">${post.excerpt ? post.excerpt : `${post.title} – `}</span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" width="100%">
 
         <!-- Outlook doesn't respect max-width so we need an extra centered table -->
@@ -1161,54 +1172,84 @@ ${ templateSettings.showBadge ? `
                             <td class="wrapper">
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
 
-                                    ${ templateSettings.headerImage ? `
+                                    ${
+                                        templateSettings.headerImage
+                                            ? `
                                     <tr>
-                                        <td class="header-image" width="100%" align="center"><img src="${templateSettings.headerImage}"${templateSettings.headerImageWidth ? ` width="${templateSettings.headerImageWidth}"` : ''}></td>
+                                        <td class="header-image" width="100%" align="center"><img src="${templateSettings.headerImage}"${
+                                                  templateSettings.headerImageWidth ? ` width="${templateSettings.headerImageWidth}"` : ""
+                                              }></td>
                                     </tr>
-                                    ` : ''}
+                                    `
+                                            : ""
+                                    }
 
 
-                                    ${ templateSettings.showHeaderIcon || templateSettings.showHeaderTitle || templateSettings.showHeaderName ? `
+                                    ${
+                                        templateSettings.showHeaderIcon || templateSettings.showHeaderTitle || templateSettings.showHeaderName
+                                            ? `
                                     <tr>
                                         <td class="${templateSettings.showHeaderTitle ? `site-info-bordered` : `site-info`}" width="100%" align="center">
                                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                                ${ templateSettings.showHeaderIcon && site.iconUrl ? `
+                                                ${
+                                                    templateSettings.showHeaderIcon && site.iconUrl
+                                                        ? `
                                                 <tr>
                                                     <td class="site-icon"><a href="${site.url}"><img src="${site.iconUrl}" alt="${site.title}" border="0"></a></td>
                                                 </tr>
-                                                ` : ``}
-                                                ${ templateSettings.showHeaderTitle ? `
+                                                `
+                                                        : ``
+                                                }
+                                                ${
+                                                    templateSettings.showHeaderTitle
+                                                        ? `
                                                 <tr>
-                                                    <td class="site-url ${!templateSettings.showHeaderName ? 'site-url-bottom-padding' : ''}"><div style="width: 100% !important;"><a href="${site.url}" class="site-title">${site.title}</a></div></td>
+                                                    <td class="site-url ${!templateSettings.showHeaderName ? "site-url-bottom-padding" : ""}"><div style="width: 100% !important;"><a href="${
+                                                              site.url
+                                                          }" class="site-title">${site.title}</a></div></td>
                                                 </tr>
-                                                ` : ``}
-                                                ${ templateSettings.showHeaderName && templateSettings.showHeaderTitle ? `
+                                                `
+                                                        : ``
+                                                }
+                                                ${
+                                                    templateSettings.showHeaderName && templateSettings.showHeaderTitle
+                                                        ? `
                                                 <tr>
                                                     <td class="site-url site-url-bottom-padding"><div style="width: 100% !important;"><a href="${site.url}" class="site-subtitle">${newsletter.name}</a></div></td>
                                                 </tr>
-                                                ` : ``}
-                                                ${ templateSettings.showHeaderName && !templateSettings.showHeaderTitle ? `
+                                                `
+                                                        : ``
+                                                }
+                                                ${
+                                                    templateSettings.showHeaderName && !templateSettings.showHeaderTitle
+                                                        ? `
                                                 <tr>
                                                     <td class="site-url site-url-bottom-padding"><div style="width: 100% !important;"><a href="${site.url}" class="site-title">${newsletter.name}</a></div></td>
                                                 </tr>
-                                                ` : ``}
+                                                `
+                                                        : ``
+                                                }
 
                                             </table>
                                         </td>
                                     </tr>
-                                    ` : ''}
+                                    `
+                                            : ""
+                                    }
 
 
                                     <tr>
-                                        <td class="post-title ${templateSettings.titleFontCategory === 'serif' ? `post-title-serif` : `` } ${templateSettings.titleAlignment === 'left' ? `post-title-left` : ``}">
-                                            <a href="${post.url}" class="post-title-link ${templateSettings.titleAlignment === 'left' ? `post-title-link-left` : ``}">${post.title}</a>
+                                        <td class="post-title ${templateSettings.titleFontCategory === "serif" ? `post-title-serif` : ``} ${
+        templateSettings.titleAlignment === "left" ? `post-title-left` : ``
+    }">
+                                            <a href="${post.url}" class="post-title-link ${templateSettings.titleAlignment === "left" ? `post-title-link-left` : ``}">${post.title}</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                                 <tr>
-                                                    <td class="post-meta ${templateSettings.titleAlignment === 'left' ? `post-meta-left` : ``}">
+                                                    <td class="post-meta ${templateSettings.titleAlignment === "left" ? `post-meta-left` : ``}">
                                                         By ${post.authors} –
                                                         ${post.published_at} –
                                                         <a href="${post.url}" class="view-online-link">View online →</a>
@@ -1217,20 +1258,30 @@ ${ templateSettings.showBadge ? `
                                             </table>
                                         </td>
                                     </tr>
-                                    ${ templateSettings.showFeatureImage && post.feature_image ? `
+                                    ${
+                                        templateSettings.showFeatureImage && post.feature_image
+                                            ? `
                                     <tr>
-                                        <td class="feature-image ${hasFeatureImageCaption ? 'feature-image-with-caption' : ''}"><img src="${post.feature_image}"${post.feature_image_width ? ` width="${post.feature_image_width}"` : ''}${post.feature_image_alt ? ` alt="${post.feature_image_alt}"` : ''}></td>
+                                        <td class="feature-image ${hasFeatureImageCaption ? "feature-image-with-caption" : ""}"><img src="${post.feature_image}"${
+                                                  post.feature_image_width ? ` width="${post.feature_image_width}"` : ""
+                                              }${post.feature_image_alt ? ` alt="${post.feature_image_alt}"` : ""}></td>
                                     </tr>
-                                    ` : ``}
-                                    ${ hasFeatureImageCaption ? `
+                                    `
+                                            : ``
+                                    }
+                                    ${
+                                        hasFeatureImageCaption
+                                            ? `
                                     <tr>
                                         <td class="feature-image-caption" align="center">${post.feature_image_caption}</td>
                                     </tr>
-                                    ` : ``}
+                                    `
+                                            : ``
+                                    }
                                     <tr>
-                                        <td class="${(templateSettings.bodyFontCategory === 'sans_serif') ? `post-content-sans-serif` : `post-content` }">
+                                        <td class="${templateSettings.bodyFontCategory === "sans_serif" ? `post-content-sans-serif` : `post-content`}">
                                             <!-- POST CONTENT START -->
-                                            ${post.html}
+                                            ${post.excerpt || post.meta_description}
                                             <!-- POST CONTENT END -->
                                         </td>
                                     </tr>
@@ -1243,16 +1294,12 @@ ${ templateSettings.showBadge ? `
                         <tr>
                             <td class="wrapper" align="center">
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="padding-top: 40px; padding-bottom: 30px;">
-                                    ${iff(!!templateSettings.footerContent, `<tr><td class="footer">${templateSettings.footerContent}</td></tr>`, '')}
+                                    ${iff(!!templateSettings.footerContent, `<tr><td class="footer">${templateSettings.footerContent}</td></tr>`, "")}
                                     <tr>
                                         <td class="footer">${site.title} &copy; ${date.getFullYear()} – <a href="%recipient.unsubscribe_url%">Unsubscribe</a></td>
                                     </tr>
 
-                                    ${ templateSettings.showBadge ? `
-                                    <tr>
-                                        <td class="footer-powered"><a href="https://ghost.org/"><img src="https://static.ghost.org/v4.0.0/images/powered.png" border="0" width="142" height="30" class="gh-powered" alt="Powered by Ghost"></a></td>
-                                    </tr>
-                                    ` : '' }
+                                   
                                 </table>
                             </td>
                         </tr>
@@ -1264,12 +1311,7 @@ ${ templateSettings.showBadge ? `
             <td>&nbsp;</td>
         </tr>
 
-    <!--[if mso]>
-                    </table>
-                </center>
-            </td>
-        </tr>
-    <![endif]-->
+   
 
     </table>
 </body>

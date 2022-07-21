@@ -1,11 +1,11 @@
-const errors = require('@tryghost/errors');
-const tpl = require('@tryghost/tpl');
-const auth = require('../../../../services/auth');
-const shared = require('../../../shared');
-const apiMw = require('../../middleware');
+const errors = require("@tryghost/errors");
+const tpl = require("@tryghost/tpl");
+const auth = require("../../../../services/auth");
+const shared = require("../../../shared");
+const apiMw = require("../../middleware");
 
 const messages = {
-    notImplemented: 'The server does not support the functionality required to fulfill the request.'
+    notImplemented: "The server does not support the functionality required to fulfill the request.",
 };
 
 const notImplemented = function (req, res, next) {
@@ -17,28 +17,33 @@ const notImplemented = function (req, res, next) {
     // @NOTE: integrations have limited access for now
     const allowlisted = {
         // @NOTE: stable
-        site: ['GET'],
-        posts: ['GET', 'PUT', 'DELETE', 'POST'],
-        pages: ['GET', 'PUT', 'DELETE', 'POST'],
-        images: ['POST'],
-        webhooks: ['POST', 'PUT', 'DELETE'],
+        site: ["GET"],
+        posts: ["GET", "PUT", "DELETE", "POST"],
+        pages: ["GET", "PUT", "DELETE", "POST"],
+        images: ["POST"],
+        webhooks: ["POST", "PUT", "DELETE"],
         // @NOTE: experimental
-        actions: ['GET'],
-        tags: ['GET', 'PUT', 'DELETE', 'POST'],
-        labels: ['GET', 'PUT', 'DELETE', 'POST'],
-        users: ['GET'],
-        themes: ['POST', 'PUT'],
-        members: ['GET', 'PUT', 'DELETE', 'POST'],
-        tiers: ['GET', 'PUT', 'POST'],
-        offers: ['GET', 'PUT', 'POST'],
-        newsletters: ['GET', 'PUT', 'POST'],
-        config: ['GET'],
-        explore: ['GET'],
-        schedules: ['PUT'],
-        files: ['POST'],
-        media: ['POST'],
-        db: ['POST'],
-        settings: ['GET']
+        actions: ["GET"],
+        tags: ["GET", "PUT", "DELETE", "POST"],
+        roles: ["GET", "PUT", "DELETE", "POST"],
+        labels: ["GET", "PUT", "DELETE", "POST"],
+        users: ["GET", "POST", "PUT", "DELETE"],
+        themes: ["POST", "PUT"],
+        members: ["GET", "PUT", "DELETE", "POST"],
+        tiers: ["GET", "PUT", "POST"],
+        offers: ["GET", "PUT", "POST"],
+        newsletters: ["GET", "PUT", "POST"],
+        invites: ["GET", "PUT", "DELETE", "POST"],
+        authentication: ["GET", "PUT", "DELETE", "POST"],
+        passwordresettoken: ["GET", "PUT", "DELETE", "POST"],
+        session: ["GET", "PUT", "DELETE", "POST"],
+        config: ["GET"],
+        explore: ["GET"],
+        schedules: ["PUT"],
+        files: ["POST"],
+        media: ["POST"],
+        db: ["POST"],
+        settings: ["GET"],
     };
 
     const match = req.url.match(/^\/(\w+)\/?/);
@@ -51,11 +56,13 @@ const notImplemented = function (req, res, next) {
         }
     }
 
-    next(new errors.InternalServerError({
-        errorType: 'NotImplementedError',
-        message: tpl(messages.notImplemented),
-        statusCode: '501'
-    }));
+    next(
+        new errors.InternalServerError({
+            errorType: "NotImplementedError",
+            message: tpl(messages.notImplemented),
+            statusCode: "501",
+        })
+    );
 };
 
 /**
@@ -68,7 +75,7 @@ module.exports.authAdminApi = [
     apiMw.cors,
     shared.middleware.urlRedirects.adminSSLAndHostRedirect,
     shared.middleware.prettyUrls,
-    notImplemented
+    notImplemented,
 ];
 
 /**
@@ -82,15 +89,10 @@ module.exports.authAdminApiWithUrl = [
     apiMw.cors,
     shared.middleware.urlRedirects.adminSSLAndHostRedirect,
     shared.middleware.prettyUrls,
-    notImplemented
+    notImplemented,
 ];
 
 /**
  * Middleware for public admin endpoints
  */
-module.exports.publicAdminApi = [
-    apiMw.cors,
-    shared.middleware.urlRedirects.adminSSLAndHostRedirect,
-    shared.middleware.prettyUrls,
-    notImplemented
-];
+module.exports.publicAdminApi = [apiMw.cors, shared.middleware.urlRedirects.adminSSLAndHostRedirect, shared.middleware.prettyUrls, notImplemented];

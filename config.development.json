@@ -1,26 +1,46 @@
 {
-  "url": "http://localhost:2368/",
-  "server": {
-    "port": 2368,
-    "host": "127.0.0.1"
-  },
-  "database": {
-    "client": "sqlite3",
-    "connection": {
-      "filename": "/home/dtc/Desktop/Ghost 5.0/content/data/ghost-local.db"
+    "url": "http://localhost:2368/",
+    "server": {
+        "port": 2368,
+        "host": "127.0.0.1"
+    },
+    "database": {
+        "client": "sqlite3",
+        "connection": {
+            "filename": "/home/dtc/Desktop/Ghost 5.0/content/data/ghost-local.db"
+        }
+    },
+
+    "logging": {
+        "transports": ["file", "stdout"]
+    },
+    "process": "local",
+    "paths": {
+        "contentPath": "/home/dtc/Desktop/Ghost 5.0/content"
+    },
+    "enableDeveloperExperiments": true,
+    "mail": {
+        "transport": "SMTP",
+        "options": {
+            "service": "Gmail",
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "secureConnection": false,
+            "auth": {
+                "user": "testforcode712@gmail.com",
+                "pass": "Chuyen92351"
+            }
+        }
+    },
+    "portal": {
+        "url": "https://unpkg.com/techfi-portal@1.19.9/umd/portal.min.js",
+        "version": "1.19.9"
+    },
+    "spam": {
+        "user_login": {
+            "minWait": 0,
+            "maxWait": 0,
+            "freeRetries": 10000000000000000
+        }
     }
-  },
-  "mail": {
-    "transport": "Direct"
-  },
-  "logging": {
-    "transports": [
-      "file",
-      "stdout"
-    ]
-  },
-  "process": "local",
-  "paths": {
-    "contentPath": "/home/dtc/Desktop/Ghost 5.0/content"
-  }
 }
