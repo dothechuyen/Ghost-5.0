@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-start align-items-center" style="margin-top: 50px" id="like-clap" style="height: 50px; box-sizing:border-box">
+            <p class="d-none" id="postId">{{id}}</p>
+            <p class="d-none" id="userId">{{#if @member}}{{@member.uuid}}{{/if}}</p>
+            <div class="d-flex justify-content-center">
+            <div class="d-flex flex-column align-items-center">
+                        <div class="d-none" id="liked">0</div>
+                        <a
+                        {{#unless @member}}href ='#/portal'{{/unless}}
+                        title="Like" rel="noopener" 
+                        {{#if @member}}onclick="like()"{{/if}}
+                        >{{> "icons/like"}}</a>
+                        <p id="like-num" class="mt-1 font-weight-bold" style="font-size: large;">-</p>
+            </div>
+            <div class="ml-5 d-flex flex-column align-items-center">
+                        <div class="d-none" id="clapped">0</div>
+                        <a 
+                        {{#unless @member}}href ='#/portal'{{/unless}} 
+                        title="Clap" rel="noopener" 
+                        {{#if @member}}onclick="clap()"{{/if}}
+                        >{{> "icons/clap"}}</a>
+                        <p id="clap-num" class="mt-1 font-weight-bold" style="font-size: large;">-</p>
+            </div>
+            
+            </div>
+            
+    <div class="ml-5 alert alert-warning alert-dismissible fade clap-alert" >
+                
+                <p style="font-size: 18px;"><strong>Warning!</strong> An user can only clap at most 30 times</p>
+                <button type="button" class="close" data-dismiss="alert" >&times;</button>
+            </div>
+</div>

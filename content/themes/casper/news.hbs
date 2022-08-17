@@ -1,0 +1,13 @@
+{{!< default}}
+<iframe id="news-frame" class="custom-iframe" title="admin-news"></iframe>
+
+<script>
+
+    let PageNews = `${integrationFrontend}/news`;
+    console.log(PageNews);
+    let elementId = 'news-frame';
+    let attrKey = 'src';
+    let attrValue = PageNews;
+
+    addValueToAttr(elementId, attrKey, attrValue);
+</script>

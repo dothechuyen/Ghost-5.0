@@ -1,0 +1,33 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template --}}
+
+{{#match @custom.publication_cover_style "!=" "None"}}
+    <div class="site-cover">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+        
+            {{#if @site.logo}}
+                <img class="" style="width: 30%; margin-top: 20px" src="{{img_url @site.logo}}" alt="{{@site.title}}" />
+            {{else}}
+                {{@site.title}}
+            {{/if}}
+        <p class="site-p">{{@site.description}}</p>
+        </div>
+    </div>
+{{/match}}
+
+{{!-- The main content area --}}
+<main id="site-main" class="site-main outer">
+    <div class="inner posts">
+
+        <div class="post-feed{{#match @custom.feed_layout "List"}} list{{/match}}">
+            {{#foreach posts}}
+
+                {{!-- The tag below includes the markup for each post - partials/post-card.hbs --}}
+                {{> "post-card"}}
+
+            {{/foreach}}
+        </div>
+
+    </div>
+</main>

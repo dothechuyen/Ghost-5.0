@@ -1,0 +1,28 @@
+{{#if isSecondary}}
+
+    <div class="d-flex justify-content-around">
+        <!-- Loop through the navigation items -->
+        {{#foreach navigation}}
+
+            <div class="">
+                <a class="navi-link-secondary {{#if current}} active{{/if}}"
+                   href="{{url absolute="true"}}">{{label}}</a>
+            </div>
+
+        {{/foreach}}
+        <!-- End the loop -->
+    </div>
+
+{{else}}
+    <div class="d-flex justify-content-between">
+        <!-- Loop through the navigation items -->
+        {{#foreach navigation}}
+
+            <div class="ml-5">
+                <a class="navi-link {{#if current}} active{{/if}}" href="{{url absolute="true"}}">{{label}}</a>
+            </div>
+
+        {{/foreach}}
+        <!-- End the loop -->
+    </div>
+{{/if}}
