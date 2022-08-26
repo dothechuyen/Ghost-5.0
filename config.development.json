@@ -7,7 +7,7 @@
     "database": {
         "client": "sqlite3",
         "connection": {
-            "filename": "/home/dtc/Desktop/Ghost 5.0/content/data/ghost-local.db"
+            "filename": "/home/dtc/Desktop/Techfi5.0/content/data/ghost-local.db"
         }
     },
 
@@ -16,7 +16,7 @@
     },
     "process": "local",
     "paths": {
-        "contentPath": "/home/dtc/Desktop/Ghost 5.0/content"
+        "contentPath": "/home/dtc/Desktop/Techfi5.0/content"
     },
     "enableDeveloperExperiments": true,
     "mail": {
