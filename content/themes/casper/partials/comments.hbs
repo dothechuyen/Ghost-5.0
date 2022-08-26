@@ -1,0 +1,22 @@
+<section class="post-full-comments">
+    {{#if @labs.members}}
+        <h2><span id="cove-count"></span> Comments</h2>
+        <div id="cove"></div>
+
+        {{#if @member}}
+            <p>Signed in as {{@member.email}} · <a href="javascript:" data-members-signout>Sign out</a></p>
+        {{else}}
+            <p>Become a {{@site.title}} member below to join the conversation. As a member, you will also receive new posts by email (you can unsubscribe at any time).</p>
+            <form data-members-form="signin" id="cove-login">
+                <input class="cove-input" data-members-email type="email" required="true" placeholder="your@email.com" />
+                <button type="submit" class="cove-button">Sign in to comment</button>
+                <span class="signin-success" style="display:none">Great! Please check your inbox for a log in link.</span>
+                <span class="signin-error" style="display:none">Something didn't work. Please try again.</span>
+            </form>
+        {{/if}}
+
+        <script>
+            const Cove = { publication: "YOUR_SITE_ID", contentId: "{{id}}", memberId: "{{@member.uuid}}", memberEmail: "{{@member.email}}" }
+        </script>
+    {{/if}}
+</section>

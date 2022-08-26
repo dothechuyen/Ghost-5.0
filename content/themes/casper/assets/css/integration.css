@@ -1,0 +1,41 @@
+.post_img{
+    max-width: 100%;
+}
+
+
+
+.info_img{
+    max-width: 150px;
+}
+
+.small_img{
+    max-width: 100px;
+}
+
+
+.no_decoration, .title{
+    text-decoration: none;
+    color: #000
+}
+
+.no_decoration:hover {
+    text-decoration: none;
+    color: #000
+}
+
+btn:hover {
+    background-color: aqua;
+}
+
+.title:hover{
+    color: blue
+}
+
+.news_title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.news_text {
+    font-size: 20px;
+}

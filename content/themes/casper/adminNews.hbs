@@ -1,0 +1,15 @@
+{{!< default}}
+
+<iframe id="news-admin-frame" class="custom-iframe" src="https://staging.i-frontent.techfi.tech/admin/news"
+        title="admin-news"></iframe>
+
+<script>
+
+    let PageNewsAdmin = `${integrationFrontend}/admin/news`;
+    console.log(PageNewsAdmin);
+    let elementId = 'news-admin-frame';
+    let attrKey = 'src';
+    let attrValue = PageNewsAdmin;
+
+    addValueToAttr(elementId, attrKey, attrValue);
+</script>

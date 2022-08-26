@@ -1,0 +1,9 @@
+<div class="d-flex flex-column align-items-center justify-content-between h-25">
+        <!-- Loop through the navigation items -->
+        {{#foreach navigation}}
+        <div class="d-flex justify-content-center p-2 mobile-nav-div">
+        <a class="navi-link {{#if current}} active{{/if}}" href="{{url absolute="true"}}">{{label}}</a>
+        </div>
+        {{/foreach}}
+        <!-- End the loop -->
+</div>
