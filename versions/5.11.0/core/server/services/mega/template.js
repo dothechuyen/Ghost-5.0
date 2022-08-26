@@ -1118,7 +1118,13 @@ a[data-flickr-embed] img {
         border-color: #34495e !important;
     }
 }
-
+.ii a[href] {
+    display: none;
+    color: #15c;
+}
+#unsubscribe-display {
+display: inline-block;
+}
 
 ${
     templateSettings.showBadge
@@ -1293,15 +1299,7 @@ ${
                                         <td class="footer">${site.title} &copy; ${date.getFullYear()} – <a href="%recipient.unsubscribe_url%">Unsubscribe</a></td>
                                     </tr>
 
-                                    ${
-                                        templateSettings.showBadge
-                                            ? `
-                                    <tr>
-                                        <td class="footer-powered"><a href="https://ghost.org/"><img src="https://static.ghost.org/v4.0.0/images/powered.png" border="0" width="142" height="30" class="gh-powered" alt="Powered by TechFi"></a></td>
-                                    </tr>
-                                    `
-                                            : ""
-                                    }
+                                   
                                 </table>
                             </td>
                         </tr>
@@ -1313,12 +1311,7 @@ ${
             <td>&nbsp;</td>
         </tr>
 
-    <!--[if mso]>
-                    </table>
-                </center>
-            </td>
-        </tr>
-    <![endif]-->
+   
 
     </table>
 </body>

@@ -1,78 +1,64 @@
 // NOTE: We must not cache references to membersService.api
 // as it is a getter and may change during runtime.
-const moment = require('moment-timezone');
-const errors = require('@tryghost/errors');
-const models = require('../../models');
-const membersService = require('../../services/members');
+const moment = require("moment-timezone");
+const errors = require("@tryghost/errors");
+const models = require("../../models");
+const membersService = require("../../services/members");
 
-const settingsCache = require('../../../shared/settings-cache');
-const tpl = require('@tryghost/tpl');
-const _ = require('lodash');
+const settingsCache = require("../../../shared/settings-cache");
+const tpl = require("@tryghost/tpl");
+const _ = require("lodash");
 
 const messages = {
-    memberNotFound: 'Member not found.',
+    memberNotFound: "Member not found.",
     memberAlreadyExists: {
-        message: 'Member already exists',
-        context: 'Attempting to {action} member with existing email address.'
+        message: "Member already exists",
+        context: "Attempting to {action} member with existing email address.",
     },
     stripeNotConnected: {
-        message: 'Missing Stripe connection.',
-        context: 'Attempting to import members with Stripe data when there is no Stripe account connected.',
-        help: 'help'
+        message: "Missing Stripe connection.",
+        context: "Attempting to import members with Stripe data when there is no Stripe account connected.",
+        help: "help",
     },
     stripeCustomerNotFound: {
-        context: 'Missing Stripe customer.',
-        help: 'Make sure you’re connected to the correct Stripe Account.'
+        context: "Missing Stripe customer.",
+        help: "Make sure you’re connected to the correct Stripe Account.",
     },
-    resourceNotFound: '{resource} not found.'
+    resourceNotFound: "{resource} not found.",
 };
 
-const allowedIncludes = ['email_recipients', 'products', 'tiers'];
+const allowedIncludes = ["email_recipients", "products", "tiers"];
 
 module.exports = {
-    docName: 'members',
+    docName: "members",
 
     browse: {
-        options: [
-            'limit',
-            'fields',
-            'filter',
-            'order',
-            'debug',
-            'page',
-            'search',
-            'include'
-        ],
+        options: ["limit", "fields", "filter", "order", "debug", "page", "search", "include"],
         permissions: true,
         validation: {
             options: {
                 include: {
-                    values: allowedIncludes
-                }
-            }
+                    values: allowedIncludes,
+                },
+            },
         },
         async query(frame) {
             const page = await membersService.api.memberBREADService.browse(frame.options);
 
             return page;
-        }
+        },
     },
 
     read: {
-        options: [
-            'include'
-        ],
+        options: ["include"],
         headers: {},
-        data: [
-            'id',
-            'email'
-        ],
+        data: ["id", "email"],
         validation: {
             options: {
                 include: {
-                    values: allowedIncludes
-                }
-            }
+                    values: allowedIncludes,
+                },
+            },
         },
         permissions: true,
         async query(frame) {
@@ -80,196 +66,202 @@ module.exports = {
 
             if (!member) {
                 throw new errors.NotFoundError({
-                    message: tpl(messages.memberNotFound)
+                    message: tpl(messages.memberNotFound),
                 });
             }
 
             return member;
-        }
+        },
     },
 
     add: {
         statusCode: 201,
         headers: {},
-        options: [
-            'send_email',
-            'email_type'
-        ],
+        options: ["send_email", "email_type"],
         validation: {
             data: {
-                email: {required: true}
+                email: { required: true },
             },
             options: {
                 email_type: {
-                    values: ['signin', 'signup', 'subscribe']
-                }
-            }
+                    values: ["signin", "signup", "subscribe"],
+                },
+            },
         },
         permissions: true,
         async query(frame) {
             const member = await membersService.api.memberBREADService.add(frame.data.members[0], frame.options);
 
             return member;
-        }
+        },
     },
 
     edit: {
         statusCode: 200,
         headers: {},
-        options: [
-            'id'
-        ],
+        options: ["id"],
         validation: {
             options: {
                 id: {
-                    required: true
-                }
-            }
+                    required: true,
+                },
+            },
         },
         permissions: true,
         async query(frame) {
             const member = await membersService.api.memberBREADService.edit(frame.data.members[0], frame.options);
 
             return member;
-        }
+        },
+    },
+
+    getMagicLink: {
+        statusCode: 200,
+        headers: {},
+        data: ["email"],
+        options: ["id"],
+        // validation: {
+        //     options: {
+        //         id: {
+        //             required: true
+        //         }
+        //     }
+        // },
+        permissions: { docName: "member", method: "read" },
+        async query(frame) {
+            const url = await membersService.api.getMagicLink({
+                tokenData: frame.data.email,
+                type: "signin",
+            });
+            console.log(frame);
+            return url;
+        },
     },
 
     editSubscription: {
         statusCode: 200,
         headers: {},
-        options: [
-            'id',
-            'subscription_id'
-        ],
-        data: [
-            'cancel_at_period_end',
-            'status'
-        ],
+        options: ["id", "subscription_id"],
+        data: ["cancel_at_period_end", "status"],
         validation: {
             options: {
                 id: {
-                    required: true
+                    required: true,
                 },
                 subscription_id: {
-                    required: true
-                }
+                    required: true,
+                },
             },
             data: {
                 cancel_at_period_end: {
-                    required: true
+                    required: true,
                 },
                 status: {
-                    values: ['canceled']
-                }
-            }
+                    values: ["canceled"],
+                },
+            },
         },
         permissions: {
-            method: 'edit'
+            method: "edit",
         },
         async query(frame) {
-            if (frame.data.status === 'canceled') {
+            if (frame.data.status === "canceled") {
                 await membersService.api.members.cancelSubscription({
                     id: frame.options.id,
                     subscription: {
-                        subscription_id: frame.options.subscription_id
-                    }
+                        subscription_id: frame.options.subscription_id,
+                    },
                 });
             } else {
                 await membersService.api.members.updateSubscription({
                     id: frame.options.id,
                     subscription: {
                         subscription_id: frame.options.subscription_id,
-                        cancel_at_period_end: frame.data.cancel_at_period_end
-                    }
+                        cancel_at_period_end: frame.data.cancel_at_period_end,
+                    },
                 });
             }
-            let model = await membersService.api.memberBREADService.read({id: frame.options.id});
+            let model = await membersService.api.memberBREADService.read({ id: frame.options.id });
             if (!model) {
                 throw new errors.NotFoundError({
-                    message: tpl(messages.memberNotFound)
+                    message: tpl(messages.memberNotFound),
                 });
             }
 
             return model;
-        }
+        },
     },
 
     createSubscription: {
         statusCode: 200,
         headers: {},
-        options: [
-            'id'
-        ],
-        data: [
-            'stripe_price_id'
-        ],
+        options: ["id"],
+        data: ["stripe_price_id"],
         validation: {
             options: {
                 id: {
-                    required: true
-                }
+                    required: true,
+                },
             },
             data: {
                 stripe_price_id: {
-                    required: true
-                }
-            }
+                    required: true,
+                },
+            },
         },
         permissions: {
-            method: 'edit'
+            method: "edit",
         },
         async query(frame) {
             await membersService.api.members.createSubscription({
                 id: frame.options.id,
                 subscription: {
-                    stripe_price_id: frame.data.stripe_price_id
-                }
+                    stripe_price_id: frame.data.stripe_price_id,
+                },
             });
-            let model = await membersService.api.memberBREADService.read({id: frame.options.id});
+            let model = await membersService.api.memberBREADService.read({ id: frame.options.id });
             if (!model) {
                 throw new errors.NotFoundError({
-                    message: tpl(messages.memberNotFound)
+                    message: tpl(messages.memberNotFound),
                 });
             }
 
             return model;
-        }
+        },
     },
 
     destroy: {
         statusCode: 204,
         headers: {},
-        options: [
-            'id',
-            'cancel'
-        ],
+        options: ["id", "cancel"],
         validation: {
             options: {
                 id: {
-                    required: true
-                }
-            }
+                    required: true,
+                },
+            },
         },
         permissions: true,
         async query(frame) {
-            return membersService.api.members.destroy({
-                id: frame.options.id
-            }, {
-                ...frame.options, require: true, cancelStripeSubscriptions: frame.options.cancel
-            });
-        }
+            return membersService.api.members.destroy(
+                {
+                    id: frame.options.id,
+                },
+                {
+                    ...frame.options,
+                    require: true,
+                    cancelStripeSubscriptions: frame.options.cancel,
+                }
+            );
+        },
     },
 
     bulkDestroy: {
         statusCode: 200,
         headers: {},
-        options: [
-            'all',
-            'filter',
-            'search'
-        ],
+        options: ["all", "filter", "search"],
         permissions: {
-            method: 'destroy'
+            method: "destroy",
         },
         async query(frame) {
             const bulkDestroyResult = await membersService.api.members.bulkDestroy(frame.options);
@@ -279,70 +271,59 @@ module.exports = {
                 meta: {
                     stats: {
                         successful: bulkDestroyResult.successful,
-                        unsuccessful: bulkDestroyResult.unsuccessful
+                        unsuccessful: bulkDestroyResult.unsuccessful,
                     },
                     unsuccessfulIds: bulkDestroyResult.unsuccessfulIds,
-                    errors: bulkDestroyResult.errors
-                }
+                    errors: bulkDestroyResult.errors,
+                },
             };
-        }
+        },
     },
 
     bulkEdit: {
         statusCode: 200,
         headers: {},
-        options: [
-            'all',
-            'filter',
-            'search'
-        ],
-        data: [
-            'action',
-            'meta'
-        ],
+        options: ["all", "filter", "search"],
+        data: ["action", "meta"],
         validation: {
             data: {
                 action: {
                     required: true,
-                    values: ['unsubscribe', 'addLabel', 'removeLabel']
-                }
-            }
+                    values: ["unsubscribe", "addLabel", "removeLabel"],
+                },
+            },
         },
         permissions: {
-            method: 'edit'
+            method: "edit",
         },
         async query(frame) {
             return membersService.api.members.bulkEdit(frame.data.bulk, frame.options);
-        }
+        },
     },
 
     exportCSV: {
-        options: [
-            'limit',
-            'filter',
-            'search'
-        ],
+        options: ["limit", "filter", "search"],
         headers: {
             disposition: {
-                type: 'csv',
+                type: "csv",
                 value() {
-                    const datetime = (new Date()).toJSON().substring(0, 10);
+                    const datetime = new Date().toJSON().substring(0, 10);
                     return `members.${datetime}.csv`;
-                }
-            }
+                },
+            },
         },
         response: {
-            format: 'plain'
+            format: "plain",
         },
         permissions: {
-            method: 'browse'
+            method: "browse",
         },
         validation: {},
         async query(frame) {
             return {
-                data: await membersService.export(frame.options)
+                data: await membersService.export(frame.options),
             };
-        }
+        },
     },
 
     importCSV: {
@@ -354,13 +335,13 @@ module.exports = {
             }
         },
         permissions: {
-            method: 'add'
+            method: "add",
         },
         async query(frame) {
-            const siteTimezone = settingsCache.get('timezone');
+            const siteTimezone = settingsCache.get("timezone");
 
             const importLabel = {
-                name: `Import ${moment().tz(siteTimezone).format('YYYY-MM-DD HH:mm')}`
+                name: `Import ${moment().tz(siteTimezone).format("YYYY-MM-DD HH:mm")}`,
             };
 
             const globalLabels = [importLabel].concat(frame.data.labels);
@@ -374,37 +355,39 @@ module.exports = {
                 importLabel,
                 LabelModel: models.Label,
                 user: {
-                    email: frame.user.get('email')
-                }
+                    email: frame.user.get("email"),
+                },
             });
-        }
+        },
     },
 
     memberStats: {
         permissions: {
-            method: 'browse'
+            method: "browse",
         },
         async query() {
             const memberStats = await membersService.api.events.getStatuses();
-            let totalMembers = _.last(memberStats) ? (_.last(memberStats).paid + _.last(memberStats).free + _.last(memberStats).comped) : 0;
+            let totalMembers = _.last(memberStats) ? _.last(memberStats).paid + _.last(memberStats).free + _.last(memberStats).comped : 0;
 
             return {
-                resource: 'members',
+                resource: "members",
                 total: totalMembers,
                 data: memberStats.map((d) => {
-                    const {paid, free, comped} = d;
+                    const { paid, free, comped } = d;
                     return {
-                        date: moment(d.date).format('YYYY-MM-DD'),
-                        paid, free, comped
+                        date: moment(d.date).format("YYYY-MM-DD"),
+                        paid,
+                        free,
+                        comped,
                     };
-                })
+                }),
             };
-        }
+        },
     },
 
     mrrStats: {
         permissions: {
-            method: 'browse'
+            method: "browse",
         },
         async query() {
             const mrrData = await membersService.api.events.getMRR();
@@ -412,33 +395,33 @@ module.exports = {
                 return {
                     currency: curr,
                     data: mrrData[curr].map((d) => {
-                        return Object.assign({}, {
-                            date: moment(d.date).format('YYYY-MM-DD'),
-                            value: d.mrr
-                        });
-                    })
+                        return Object.assign(
+                            {},
+                            {
+                                date: moment(d.date).format("YYYY-MM-DD"),
+                                value: d.mrr,
+                            }
+                        );
+                    }),
                 };
             });
             return {
-                resource: 'mrr',
-                data: mrrStats
+                resource: "mrr",
+                data: mrrStats,
             };
-        }
+        },
     },
 
     activityFeed: {
-        options: [
-            'limit',
-            'filter'
-        ],
+        options: ["limit", "filter"],
         permissions: {
-            method: 'browse'
+            method: "browse",
         },
         async query(frame) {
             const events = await membersService.api.events.getEventTimeline(frame.options);
             return {
-                events
+                events,
             };
-        }
-    }
+        },
+    },
 };
